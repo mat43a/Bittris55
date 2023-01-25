@@ -1,0 +1,46 @@
+using System;
+ 
+class Program
+{
+    static int Bitcount(int n)
+    {
+        int count = 0;
+        while (n != 0)
+        {
+            count++;
+            n &= (n - 1);
+        }
+        return count;
+    }
+ 
+    static void Main()
+    {
+        //get the first input line
+        int numberCommands = int.Parse(Console.ReadLine());
+        int piecesCount = numberCommands / 4;
+ 
+        //define field variables as bytes so that they hold only bits 0-7
+        byte firstRow = 0;
+        byte secondRow = 0;
+        byte thirdRow = 0;
+        byte forthRow = 0;
+ 
+        //define variable to hold the score
+        int shapeScore = 0;
+        int totalScore = 0;
+ 
+        //define some flags
+        bool gameEnd = false;
+        bool scored = false;
+ 
+        //get input data for each piece and move it
+        for (int i = 0; i < piecesCount; i++)
+        {
+            int newPiece = int.Parse(Console.ReadLine());
+            string dirOne = Console.ReadLine();
+            string dirTwo = Console.ReadLine();
+            string dirThree = Console.ReadLine();
+ 
+            shapeScore = Bitcount(newPiece); //count 1 bits in integer
+            byte pieceShape = (byte)newPiece; //take only bits 0-7
+            scored = false;
