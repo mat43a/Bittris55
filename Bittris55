@@ -44,3 +44,52 @@ class Program
             shapeScore = Bitcount(newPiece); //count 1 bits in integer
             byte pieceShape = (byte)newPiece; //take only bits 0-7
             scored = false;
+ 
+            //place shape on first row
+            if ((firstRow & pieceShape) == 0) firstRow = (byte)(firstRow | pieceShape);
+            else
+            {
+                gameEnd = true;
+                break;
+            }
+ 
+            //piece on first row, move to second row
+            if (dirOne == "L") //move shape left
+            {
+                if ((pieceShape << 1) <= 255)
+                {
+                    pieceShape = (byte)(pieceShape << 1);
+                    firstRow = (byte)(firstRow ^ (pieceShape / 2)); //divide by 2 to compensate for left shift
+                    firstRow = (byte)(firstRow | pieceShape);
+                }
+            }
+ 
+            if (dirOne == "R") //move shape right
+            {
+                if ((pieceShape & 1) == 0)
+                {
+                    pieceShape = (byte)(pieceShape >> 1);
+                    firstRow = (byte)(firstRow ^ (pieceShape * 2)); //multiply by 2 to compensate for the right shift
+                    firstRow = (byte)(firstRow | pieceShape);
+                }
+            }
+ 
+            if ((pieceShape & secondRow) == 0) //move shape down
+            {
+                secondRow = (byte)(pieceShape | secondRow); //place shape on second row
+                firstRow = (byte)(firstRow ^ pieceShape); //remove shape from first row
+            }
+            else if (firstRow == 255)
+            {
+                scored = true;
+                totalScore = totalScore + shapeScore * 10;
+                firstRow = 0;
+        continue;
+            }
+            else
+            {
+                gameEnd = true;
+                totalScore = totalScore + shapeScore;
+                break;
+            }
+ 
