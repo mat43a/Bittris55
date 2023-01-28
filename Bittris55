@@ -93,3 +93,57 @@ class Program
                 break;
             }
  
+            //check if piece is on second row, move to third
+            if (! scored)
+            {
+                if (dirTwo == "L")
+                {
+                    if ((pieceShape << 1) <= 255)
+                    {
+                        pieceShape = (byte)(pieceShape << 1);
+                        secondRow = (byte)(secondRow ^ (pieceShape / 2)); //divide by 2 to compensate for left shift
+                        secondRow = (byte)(secondRow | pieceShape);
+                    }
+                }
+                if (dirTwo == "R")
+                {
+                    if ((pieceShape & 1) == 0)
+                    {
+                        pieceShape = (byte)(pieceShape >> 1);
+                        secondRow = (byte)(secondRow ^ (pieceShape * 2)); //multiply by 2 to compensate for the right shift
+                        secondRow = (byte)(secondRow | pieceShape);
+                    }
+                }
+ 
+                if ((pieceShape & thirdRow) == 0)
+                {
+                    thirdRow = (byte)(pieceShape | thirdRow);
+                    secondRow = (byte)(secondRow ^ pieceShape);
+                }
+                else if (secondRow == 255)
+                {
+                    scored = true;
+                    totalScore = totalScore + shapeScore * 10;
+                    secondRow = (byte)(secondRow & firstRow);
+                    firstRow = 0;
+            continue;
+                }
+                else
+                {
+                    scored = true;
+                    totalScore = totalScore + shapeScore;
+                }
+            }
+ 
+            //check if piece is on third row, move to forth
+            if (! scored)
+            {
+                if (dirThree == "L")
+                {
+                    if ((pieceShape << 1) <= 255)
+                    {
+                        pieceShape = (byte)(pieceShape << 1);
+                        thirdRow = (byte)(thirdRow ^ (pieceShape / 2));
+                        thirdRow = (byte)(thirdRow | pieceShape);
+                    }
+                }
