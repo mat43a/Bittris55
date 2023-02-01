@@ -147,3 +147,48 @@ class Program
                         thirdRow = (byte)(thirdRow | pieceShape);
                     }
                 }
+                if (dirThree == "R")
+                {
+                    if ((pieceShape & 1) == 0)
+                    {
+                        pieceShape = (byte)(pieceShape >> 1);
+                        thirdRow = (byte)(thirdRow ^ (pieceShape * 2));
+                        thirdRow = (byte)(thirdRow | pieceShape);
+                    }
+                }
+ 
+                if ((pieceShape & forthRow) == 0)
+                {
+                    forthRow = (byte)(pieceShape | forthRow);
+                    thirdRow = (byte)(thirdRow ^ pieceShape);
+                }
+                else if (thirdRow == 255)
+                {
+                    totalScore = totalScore + shapeScore * 10;
+                    thirdRow = (byte)(thirdRow & secondRow);
+                    secondRow = 0;
+                    secondRow = (byte)(secondRow | firstRow);
+                    firstRow = 0;
+            continue;
+                }
+ 
+                if (forthRow == 255)
+                {
+                    totalScore = totalScore + shapeScore * 10;
+                    forthRow = (byte)(forthRow & thirdRow);
+                    thirdRow = 0;
+                    thirdRow = (byte)(thirdRow | secondRow);
+                    secondRow = 0;
+                    secondRow = (byte)(secondRow | firstRow);
+                    firstRow = 0;
+                }
+        else
+        {
+                    totalScore = totalScore + shapeScore;
+        }
+            }
+ 
+        }
+        Console.WriteLine(totalScore);
+    }
+}
